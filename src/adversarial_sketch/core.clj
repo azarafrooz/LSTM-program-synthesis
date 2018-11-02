@@ -114,7 +114,6 @@
 
 (defn synthesize-program [parse-lines]
   "Consider the sketch program itself as stream of string tokens augmented with the LSTM predictions."
-  ;;usedLoops: [{depth, coefficient, variable, intercept}]
   (let [syntaxDic (parse-lstm-ouput parse-lines)
         xCoefficients ""
         yCoefficients ""
@@ -126,8 +125,7 @@
         biggestNumber -1 CPUs 8 timeout 10 usePrior false maximumDepth 3 canLoop true canReflect false
         smallestPossibleLoss (+ 1 (* 3 (count parse-lines)))
         upperBoundOnLoss (format "--bnd-mbits %d" (min 5 (int (Math/ceil (log2 (+ 1 smallestPossibleLoss))))))
-        ;coefficientGenerator1 ""
-        ;coefficientGenerator2 ""
+      
         coefficientGenerator1 (clojure.string/join " | " (map str xCoefficients))
         coefficientGenerator2 (clojure.string/join " | " (map str yCoefficients))
 
@@ -222,47 +220,4 @@ bit renderSpecification(SHAPEVARIABLES) {
                          fname (.getAbsolutePath t)
                          fdir ()
                          content (sh "cat" fname)]
-                     ;(sh "java" "-cp" "/Users/mahdiazarafrooz/Desktop/Human/adversarial-sketch/sketch-1.7.5-noarch.jar" "sketch.compiler.main.seq.SequentialSketchMain" fname)
-                     ;(SequentialSketchMain/main (into-array String [fname ]) )
-                     ;with-out-str to redirect stdout to string
-                     ;(print (with-out-str (SequentialSketchMain/main (into-array String [fname ]) ) ))
                      (get-body-sketchoutput (with-system-out-str (SequentialSketchMain/main (into-array String [fname ]) ) ) usePrior)))))
-;(get-body-sketchoutput (:out (SequentialSketchMain/main (into-array String [fname ]) ) ) usePrior)
-;(SequentialSketchMain/main (into-array String ["--fe-output-code" fname]) )
-
-
-
-
-;<< shell way to run the Sketch solver >>
-;(use '[clojure.java.shell :only [sh]])
-;(def ans (sh "java" "-cp" "/Users/mahdiazarafrooz/Desktop/Human/adversarial-sketch/sketch-1.7.4/sketch-frontend/sketch-1.7.4-noarch.jar" "sketch.compiler.main.seq.SequentialSketchMain" "isolateRightmost.sk"))
-;(:out ans)
-
-;<<non-shellway to run the Sketch Solver>>
-;(import 'sketch.compiler.main.seq.SequentialSketchMain)
-;(SequentialSketchMain/main (into-array String ["isolateRightmost.sk"]))
-;(SequentialSketchMain/main (into-array String ["--fe-output-code" "isolateRightmost.sk"]))
-
-
-;Temporary files is essential here since to interact with sketch program
-; we need a file-based API.
-; Using createTempFile is important to ensure that temporary files are
-; placed in an appropriate location on the filesystem, which can differ
-; based on the operating system being used.
-
-
-;(defn -main
-;  ;  "I don't do a whole lot ... yet."
-;  ;  (g/-main))
-;  [& args]
-;  ;(print (synthesize-program [2 6 7 8 9 2 7 8 9 10]))
-;  ;(def output-example "void render (int shapeIdentity, int cx, int cy, int lx1, int ly1, int lx2, int ly2, bit dashed, bit arrow, int rx1, int ry1, int rx2, int ry2, ref bit _out)  implements renderSpecification/*tmpzqJj8W.sk:209*/\n{\n  _out = 0;\n  assume (((shapeIdentity == 0) || (shapeIdentity == 1)) || (shapeIdentity == 2)): \"Assume at tmpzqJj8W.sk:210\"; //Assume at tmpzqJj8W.sk:210\n  assume (shapeIdentity != 2): \"Assume at tmpzqJj8W.sk:212\"; //Assume at tmpzqJj8W.sk:212\n  assume (!(dashed)): \"Assume at tmpzqJj8W.sk:216\"; //Assume at tmpzqJj8W.sk:216\n  assume (!(arrow)): \"Assume at tmpzqJj8W.sk:217\"; //Assume at tmpzqJj8W.sk:217\n  int[2] coefficients1 = {-3,28};\n  int[2] coefficients2 = {-3,24};\n  int[0] environment = {};\n  int[1] coefficients1_0 = coefficients1[0::1];\n  int[1] coefficients2_0 = coefficients2[0::1];\n  dummyStartLoop();\n  int loop_body_cost = 0;\n  bit _pac_sc_s15_s17 = 0;\n  for(int j = 0; j < 3; j = j + 1)/*Canonical*/\n  {\n    assert (j < 4); //Assert at tmpzqJj8W.sk:96 (1334757887901394789)\n    bit _pac_sc_s31 = _pac_sc_s15_s17;\n    if(!(_pac_sc_s15_s17))/*tmpzqJj8W.sk:103*/\n    {\n      int[1] _pac_sc_s31_s33 = {0};\n      push(0, environment, j, _pac_sc_s31_s33);\n      dummyStartLoop();\n      int loop_body_cost_0 = 0;\n      int boundary_cost = 0;\n      bit _pac_sc_s15_s17_0 = 0;\n      for(int j_0 = 0; j_0 < 3; j_0 = j_0 + 1)/*Canonical*/\n      {\n        assert (j_0 < 4); //Assert at tmpzqJj8W.sk:96 (-4325113148049933570)\n        if(((j_0 > 0) && 1) && 1)/*tmpzqJj8W.sk:97*/\n        {\n          dummyStartBoundary();\n          bit _pac_sc_s26 = _pac_sc_s15_s17_0;\n          if(!(_pac_sc_s15_s17_0))/*tmpzqJj8W.sk:99*/\n          {\n            int[2] _pac_sc_s26_s28 = {0,0};\n            push(1, _pac_sc_s31_s33, j_0, _pac_sc_s26_s28);\n            int x_s39 = 0;\n            validateX(((coefficients1_0[0]) * (_pac_sc_s26_s28[1])) + 8, x_s39);\n            int y_s43 = 0;\n            validateY(((coefficients2_0[0]) * (_pac_sc_s26_s28[0])) + 7, y_s43);\n            int x2_s47 = 0;\n            validateX(((coefficients1_0[0]) * (_pac_sc_s26_s28[1])) + 9, x2_s47);\n            int y2_s51 = 0;\n            validateY(((coefficients2_0[0]) * (_pac_sc_s26_s28[0])) + 7, y2_s51);\n            assert ((x_s39 == x2_s47) || (y_s43 == y2_s51)); //Assert at tmpzqJj8W.sk:137 (2109344902378156491)\n            bit _pac_sc_s26_s30 = 0 || (((((((shapeIdentity == 1) && (x_s39 == lx1)) && (y_s43 == ly1)) && (x2_s47 == lx2)) && (y2_s51 == ly2)) && (0 == dashed)) && (0 == arrow));\n            int x_s39_0 = 0;\n            validateX(((coefficients1_0[0]) * (_pac_sc_s26_s28[0])) + 7, x_s39_0);\n            int y_s43_0 = 0;\n            validateY(((coefficients2_0[0]) * (_pac_sc_s26_s28[1])) + 8, y_s43_0);\n            int x2_s47_0 = 0;\n            validateX(((coefficients1_0[0]) * (_pac_sc_s26_s28[0])) + 7, x2_s47_0);\n            int y2_s51_0 = 0;\n            validateY(((coefficients2_0[0]) * (_pac_sc_s26_s28[1])) + 9, y2_s51_0);\n            assert ((x_s39_0 == x2_s47_0) || (y_s43_0 == y2_s51_0)); //Assert at tmpzqJj8W.sk:137 (8471357942716875626)\n            boundary_cost = 2;\n            _pac_sc_s26_s30 = _pac_sc_s26_s30 || (((((((shapeIdentity == 1) && (x_s39_0 == lx1)) && (y_s43_0 == ly1)) && (x2_s47_0 == lx2)) && (y2_s51_0 == ly2)) && (0 == dashed)) && (0 == arrow));\n            _pac_sc_s26 = _pac_sc_s26_s30;\n          }\n          _pac_sc_s15_s17_0 = _pac_sc_s26;\n          dummyEndBoundary();\n        }\n        bit _pac_sc_s31_0 = _pac_sc_s15_s17_0;\n        if(!(_pac_sc_s15_s17_0))/*tmpzqJj8W.sk:103*/\n        {\n          int[2] _pac_sc_s31_s33_0 = {0,0};\n          push(1, _pac_sc_s31_s33, j_0, _pac_sc_s31_s33_0);\n          int x_s39_1 = 0;\n          validateX(((coefficients1_0[0]) * (_pac_sc_s31_s33_0[1])) + 7, x_s39_1);\n          int y_s43_1 = 0;\n          validateY(((coefficients2_0[0]) * (_pac_sc_s31_s33_0[0])) + 7, y_s43_1);\n          loop_body_cost_0 = 1;\n          _pac_sc_s31_0 = 0 || (((shapeIdentity == 0) && (cx == x_s39_1)) && (cy == y_s43_1));\n        }\n        _pac_sc_s15_s17_0 = _pac_sc_s31_0;\n      }\n      assert (loop_body_cost_0 != 0); //Assert at tmpzqJj8W.sk:105 (710966093749967188)\n      dummyEndLoop();\n      loop_body_cost = (loop_body_cost_0 + boundary_cost) + 1;\n      _pac_sc_s31 = _pac_sc_s15_s17_0;\n    }\n    _pac_sc_s15_s17 = _pac_sc_s31;\n  }\n  assert (loop_body_cost != 0); //Assert at tmpzqJj8W.sk:105 (-6090248756724217227)\n  dummyEndLoop();\n  _out = _pac_sc_s15_s17;\n  minimize(3 * (loop_body_cost + 1))")
-;  (parser/parse-sketch-output adversarial-sketch.sketch-parser/output-example {} {} 0)
-;  )
-
-;(defn -main
-;  ;  "I don't do a whole lot ... yet."
-;  ;  (g/-main))
-;  [& args]
-;  (print (synthesize-program [2 6 7 8 9 2 7 8 9 10]))
-;  )

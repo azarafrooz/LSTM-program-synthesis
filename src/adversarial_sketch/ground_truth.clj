@@ -107,5 +107,5 @@
     )
   )
 
-(def all-records (json/read-str (slurp "/Users/mahdiazarafrooz/Desktop/Human/adversarial-sketch/data/image_trace.json")
+(def all-records (json/read-str (slurp "data/image_trace.json")
                                 :key-fn keyword))

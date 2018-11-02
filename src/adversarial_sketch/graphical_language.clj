@@ -72,12 +72,6 @@
 
 
 
-;; run sketch
-;(q/defsketch trigonometry
-;             :size [300 300]
-;             :draw draw-new)
-
-
 
 
 
@@ -111,20 +105,7 @@
 
 
 
-;(defn draw-test []
-;; make background white
-;  (q/background 255)
-;
-;  ; move origin point to centre of the sketch
-;  ; by default origin is in the left top corner
-;  (q/with-translation [(/ (q/width) 2) (/ (q/height) 2)]
-;                      ; parameter t goes 0, 0.01, 0.02, ..., 99.99, 100
-;                      (doseq [i (range 0 3 1)]
-;                        (doseq [j (range 0 3 1)]
-;                          (ellipse-draw (+ (* -3 j) 7) (+ (* -3 i) 7) 1)
-;                          (line-draw (+ (* -3 j) 8) (+ (* -3 i) 7) (+ (* -3 j) 9) (+ (* -3 i) 7))
-;                          (line-draw (+ (* -3 i) 7) (+ (* -3 j) 8) (+ (* -3 i) 7) (+ (* -3 j) 9))))))
-;
+
 
 
 (defn draw-test2 []
@@ -221,76 +202,6 @@
                                  (+ (* ~y2-factor ~y2-variable) ~y2-offset))))})))
 
 
-
-;(defn eval-graphic-draw [sketch-ast]
-;  (-> (cons `(\( defn draw-magic  [])  (graphic-compiler-transformer sketch-ast))
-;      print))
-
-
-;(defn eval-graphic-draw [sketch-ast]
-;  (-> `( \( defn draw-magic  [] ~@(graphic-compiler-transformer sketch-ast) \)\))
-;      print))
-
-
-
-
-
-;(defmacro eval-graphic-draw [sketch-ast]
-;  `(defn draw-magic [] ~@(graphic-compiler-transformer sketch-ast)))
-
-;;;;;;test stufff
-;(declare draw-magic)
-;(defn run-draw [lstm-out]
-;  (let [sketch-ast  (-> (:body (synthesizer/synthesize-program lstm-out))
-;                          string/split-lines
-;                          (sketch-parser/parse-sketch-output {} {} 0)
-;                          :commands)]
-;      (q/defsketch trigonometry
-;                       :title "compiled codes"
-;                       :setup setup
-;                       :size [300 300]
-;                       :draw (fn drawfn []
-;                               (doseq [i (range 0 3 1)]
-;                                 (doseq [j (range 0 3 1)]
-;                                   (ellipse-draw (+ (* -3 j) 7) (+ (* -3 i) 7) 1)
-;                                   (line-draw (+ (* -3 j) 8) (+ (* -3 i) 7) (+ (* -3 j) 9) (+ (* -3 i) 7))
-;                                   (line-draw (+ (* -3 i) 7) (+ (* -3 j) 8) (+ (* -3 i) 7) (+ (* -3 j) 9))))))))
-
-;;;;;;;;;;;;; Macro and elegebanr way
-;;(defmacro compiler-macro [sketch-ast]
-;;  (-> `(graphic-compiler-transformer ~@sketch-ast)
-;;      first))
-;
-;(defn run-draw [lstm-out]
-;  (let [sketchast  (-> (:body (synthesizer/synthesize-program lstm-out))
-;                        string/split-lines
-;                        (sketch-parser/parse-sketch-output {} {} 0)
-;                        :commands)]
-;    (println sketchast)
-;    (println (macroexpand-1 `(graphic-compiler-transformer ~@sketchast)))
-;    (q/defsketch trigonometry
-;                 :title "compiled codes"
-;                 :setup setup
-;                 :size [300 300]
-;                 :draw (fn drawfn []
-;                         ;(eval (macroexpand-1 `(graphic-compiler-transformer ~@sketchast)))))))
-;                          (graphic-compiler-transformer ~@sketchast)))))
-;
-;
-;
-;
-
-
-
-
-
-
-;;;;;;it works totally (without a macro)...I would like to make it fancier with macro tho
-
-;;(defmacro compiler-macro [sketch-ast]
-;;  `(graphic-compiler-transformer ~sketch-ast))
-;
-
 (defn eval-transformer [sketch-ast]
   (graphic-compiler-transformer sketch-ast))
 
@@ -350,29 +261,6 @@
   (let [sketch-ast  (-> (string/split lstm-out #"[\n\|\|]")
                         (sketch-parser/parse-sketch-output {} {} 0)
                         :commands)]
-    ;(println sketch-ast)
-    ;(print (graphic-compiler-transformer (string/join " " sketch-ast)))
-    ;(print (type (eval-transformer sketch-ast)))
-    ;(print (eval-transformer sketch-ast))
-    ;(print (reduce cons (eval-transformer sketch-ast)))
-    ;(print (apply concat (eval-transformer sketch-ast)))
-    ;(print (concat (first (eval-transformer sketch-ast)) (second (eval-transformer sketch-ast))
-    ;                       (rest (rest (eval-transformer sketch-ast)))))
-    ;(print (concat (take 2 (eval-transformer sketch-ast)) (rest (rest (eval-transformer sketch-ast) ))))
-    ;(print (reduce apply (eval-transformer sketch-ast)))
-    ;(print (concat (second (eval-transformer sketch-ast)) (rest (rest (eval-transformer sketch-ast)))))
-    ;(print (eval-transformer2 sketch-ast))
-    ;(println (macroexpand-1 `(eval-transformer-new ~sketch-ast)))
-    ;(println (eval-transformer-new sketch-ast))
-
-    ;;(print (apply concat (first (eval-transformer sketch-ast)) (rest (eval-transformer sketch-ast))))
-    ;(print (concat (concat (second (eval-transformer sketch-ast))
-    ;                     (rest (rest (eval-transformer sketch-ast))))
-    ;;             (first (eval-transformer sketch-ast))))
-    ;(print (apply concat (rest (eval-transformer sketch-ast))))
-    ;(print (rest (eval-transformer sketch-ast)))
-    ;(print (map graphic-compiler-transformer sketch-ast))
-    ;(println (macroexpand-1 `(graphic-compiler-transformer ~@sketch-ast)))
     (let [fns (eval-transformer-new sketch-ast)]
       (spit "generated_code.clj" (print-str fns))
       (print (slurp "generated_code.clj"))
@@ -410,10 +298,7 @@
                         :commands)]
     (let [fns (eval-transformer-general sketch-ast)
           fns-string (print-str fns)]
-      ;(spit "generated_code.clj" (subs fns-string 1 (- (count fns-string) 1))) ;remove extra paranthesis
-      ;(print (type (first fns)))
       (spit "generated_code.clj" fns-string) ;remove extra paranthesis
-      ;(print (slurp "generated_code.clj"))
       (q/defsketch trigonometry
                    :title "compiled codes"
                    :setup setup
@@ -423,101 +308,4 @@
                            )))
     ))
 
-;;;;;;;;back to this when other stuff didn't work
-;(defn eval-graphic-draw [sketch-ast]
-;  `(defn draw-magic [] ~@(graphic-compiler-transformer sketch-ast)))
-;
-;
-;(declare draw-magic)
-;
-;(defn run-draw [lstm-out]
-;  (do (-> (:body (synthesizer/synthesize-program lstm-out))
-;          string/split-lines
-;          (sketch-parser/parse-sketch-output {} {} 0)
-;          :commands
-;          eval-graphic-draw))
-;
-;  (q/defsketch trigonometry
-;               :title "compiled codes"
-;               :setup setup
-;               :size [300 300]
-;               :draw draw-magic))
 
-;;;;;;;;back to this when other stuff didn't work
-
-;(defn run-draw [lstm-out]
-;  (eval-graphic-draw lstm-out))
-;
-
-;(defn run-draw [lstm-out]
-;  (->  (:body (synthesizer/synthesize-program lstm-out))
-;           string/split-lines
-;           (sketch-parser/parse-sketch-output {} {} 0)
-;           :commands
-;           eval-graphic-draw))
-;(q/defsketch trigonometry
-;             :title "compiled codes"
-;             :setup setup
-;             :size [300 300]
-;             :draw graphic-compiler-transformer)
-
-
-;(defn eval-graphic-draw [sketch-ast]
-;  (->> (-> (graphic-compiler-transformer sketch-ast)
-;           string/join
-;           (str ")))"))
-;       (str "(defn draw-magic []")
-;       print))
-
-
-;(->  (:body (synthesizer/synthesize-program [3 10 10 1]))
-;     string/split-lines
-;     (sketch-parser/parse-sketch-output {} {} 0)
-;     :commands
-;     eval-graphic-draw)
-;(declare draw-magic)
-
-;(defn run-draw [sketch-parser]
-;          (do (->  (:body (synthesizer/synthesize-program [3 10 10 1]))
-;                   string/split-lines
-;                   (sketch-parser/parse-sketch-output {} {} 0)
-;                   :commands
-;                   eval-graphic-draw)))
-;          (q/defsketch trigonometry
-;                       :title "compiled codes"
-;                       :setup setup
-;                       :size [300 300]
-;                       :draw draw-magic)))
-
-
-;;(defn dsl-draw []
-;  (q/defsketch trigonometry
-;               :title "compiled codes"
-;               :setup setup
-;               :size [300 300]
-;               :draw draw-magic))
-
-;;; run sketch
-;(q/defsketch trigonometry
-;             :title "compiled codes"
-;             :setup setup
-;             :size [300 300]
-;             :draw draw-magic)
-
-
-
-
-
-;(defn draw2
-;  "Example of a draw in quil"
-;  []
-;  ; make background white
-;  (q/background 255)
-;  ; move origin point to centre of the sketch
-;  ; by default origin is in the left top corner
-;  (q/with-translation [(/ (q/width) 2) (/ (q/height) 2)]
-;                      ; parameter t goes 0, 0.01, 0.02, ..., 99.99, 100
-;                      (doseq [t (range 0 100 0.01)]
-;                        ; draw a point with x = t * sin(t) and y = t * cos(t)
-;                        (q/point (* t (q/sin t))
-;                                 (* t (q/cos t))))))
