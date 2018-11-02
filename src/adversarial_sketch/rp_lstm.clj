@@ -48,7 +48,7 @@
     :default (* 256 256)
     :parse-fn #(Integer/parseInt ^String %)]
    ["train-data-dir"  "--train-data-dir"
-    :default "/Users/mahdiazarafrooz/Downloads/syntheticTrainingData"
+    :default "syntheticTrainingData"
     :parse-fn #(str %)]
    ])
 

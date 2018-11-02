@@ -107,32 +107,6 @@
      (node/const (node/gen-name "word") (or e unk)))))
 
 
-;[flare.neanderthal-ops :as no]
-;(no/multinomial-dist (seq (:value logits)) )
-;(defn sample-seq
-;  "Samples the network and returns num_samples samples of len max_seq_len.
-;  Outputs: sample, hidden
-;  - samples: num_samples x max_seq_lenght (a sample sequenced in each row)"
-;  [cell hidden->loggits inputs max_seq_len num_samples start_symbol end_symbol]
-;  (let [factory (-> cell cell-model model/tensor-factory)
-;        out-dim (output-dim cell)
-;        hidden (init-hidden cell)
-;        input (first inputs)
-;        in-dim (input-dim cell)]
-;    ; We check until we hit the stop symbol or it passes the maximum length of seq
-;    (loop [input input hiddens (list (init-hidden cell)) samples '() cnt 0]
-;      (if (and (< cnt max_seq_len) (not= (first samples) end_symbol))
-;        (let [last-hidden (first hiddens)
-;              hidden (add-input cell input last-hidden)
-;              sample (if (= cnt 0) one-hot-vec
-;                                   (no/multinomial-dist
-;                                     (-> (module/graph hidden->loggits (first hidden))
-;                                         :value)))]
-;          (recur (node/const sample) (cons hidden hiddens) (cons (.indexOf sample 1) samples) (+ cnt 1)))
-;        (reverse samples)))))
-
-
-
 (defn sample-seq
   "Samples the network by considering the grammer of the DSL
    and returns num_samples samples of len max_seq_len.
@@ -151,7 +125,7 @@
               hidden (add-input cell input last-hidden)
               sample (cond
                 (= cnt 0) one-hot-vec
-                ;"start symbol location-> select from index 1 2 or 3 or stop (- embed-size guidance-token-size -1)"
+               
                 (= (last previous-samples) 0)
                 (no/multinomial-dist (mapv * (into [] (-> (module/graph hidden->loggits (first hidden))
                                                           :value)) (assoc zero-array 1 1 2 1 3 1 end_symbol 1) ))
