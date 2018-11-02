@@ -1,0 +1,16 @@
+sketch-ouput = line|rectangle|circle
+
+line="Line"<'('><'('>x-coordinates1<','>y-coordinates1<'), '><'('>x-coordinates2<','>y-coordinates2<')'><', arrow = '>arrow<', solid = '>solid<')'>
+rectangle="Rectangle"<'('><'('>x-coordinates1<','>y-coordinates1<'), '><'('>x-coordinates2<','>y-coordinates2<')'><')'>
+circle="Circle"<'(center = ('>x-coordinates1<','>y-coordinates1<'), '><'radius = '>radius<')'>
+
+
+x-coordinates1=#'[0-9]+'
+y-coordinates1=#'[0-9]+'
+x-coordinates2=#'[0-9]+'
+y-coordinates2=#'[0-9]+'
+
+arrow='True'|'False'
+solid='True'|'False'
+
+radius=#'[0-9]+'

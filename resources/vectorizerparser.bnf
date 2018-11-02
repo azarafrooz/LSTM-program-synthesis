@@ -1,0 +1,14 @@
+expr = shape
+shape = line|rectangle|circle
+
+line="Line"<'('><'('>coordinates1<')'><' '><'('>coordinates2<')'><' arrow = '>arrow<' solid = '>solid<')'>
+rectangle="Rectangle"<'('><'('>coordinates1<')'><' '><'('>coordinates2<')'><')'>
+circle="Circle"<'(center = ('>coordinates1<')'><' radius = '>radius<')'>
+
+coordinates1=#'[0-9]+'
+coordinates2=#'[0-9]+'
+
+arrow='True'|'False'
+solid='True'|'False'
+
+radius=#'[0-9]+'

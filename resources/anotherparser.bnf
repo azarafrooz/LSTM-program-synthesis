@@ -1,0 +1,107 @@
+expr = add-sub
+<add-sub> = mul-div | add | sub
+<mul-div> = term | mul | div
+add = add-sub <'+'> mul-div
+sub = add-sub <'-'> mul-div
+mul = mul-div <'*'> term
+div = mul-div <'/'> term
+<term> = number | <'('> add-sub <')'>
+number = #'[0-9]+'
+
+<expr> = loop & loop-free-shape
+<loop-free-shape> = loop-free-line|loop-free-rectangle|loop-free-circle
+<loop> = outer-loop & inner-loop
+
+<outer-loop> = <"[\"i\" "><'{:factor '>outer-loop-factor<', :variable '>outer-loop-variable<', :offset '>outer-loop-offset<"} ">outer-rest
+outer-loop-factor = #'[-+0-9]+'|'nil'
+outer-loop-variable = '"i"'|'"j"'|'nil'
+outer-loop-offset = #'[-+0-9]+'|'nil'
+<outer-rest>=<"[\"j\" "><'{:factor '>inner-loop-factor<', :variable '>inner-loop-variable<', :offset '>inner-loop-offset<"} ">inner-rest
+
+inner-loop-factor = #'[-+0-9]+'|'nil'
+inner-loop-variable = '"i"'|'"j"'|'nil'
+inner-loop-offset = #'[-+0-9]+'|'nil'
+<inner-rest>=<'[[\"circle\" {:factor '>inner-circle-x-factor<', :variable "'>inner-circle-x-variable<'", :offset '>inner-circle-x-offset<"} ">
+<'{:factor '>inner-circle-y-factor<', :variable "'>inner-circle-y-variable<'", :offset '>inner-circle-y-offset<"}">rest
+
+
+inner-circle-x-factor = #'[-+0-9]+'|'nil'
+inner-circle-x-variable = 'i'|'j'|'nil'
+inner-circle-x-offset = #'[-+0-9]+'|'nil'
+inner-circle-y-factor = #'[-+0-9]+'|'nil'
+inner-circle-y-variable ='i'|'j'|'nil'
+inner-circle-y-offset = #'[-+0-9]+'|'nil'
+
+
+rest=#".*"
+
+inner-loop = #".*"
+loop-free-line = #".*"
+loop-free-rectangle= #".*"
+loop-free-circle= #".*"
+
+
+
+
+
+###########
+<expr> = loop & loop-free-shape
+<expr> = loop
+<loop> = {outer-loop} {inner-loop} |
+
+<outer-loop> =<'i factor '>outer-loop-factor<' variable '>outer-loop-variable<' offset '>outer-loop-offset<' '>outer-rest
+outer-loop-factor = #'[-+0-9]+'|'nil'
+outer-loop-variable = 'i'|'j'|'nil'
+outer-loop-offset = #'[-+0-9]+'|'nil'
+<outer-rest>=<'j factor '>inner-loop-factor<' variable '>inner-loop-variable<' offset '>inner-loop-offset<' '>inner-rest
+
+inner-loop-factor = #'[-+0-9]+'|'nil'
+inner-loop-variable = 'i'|'j'|'nil'
+inner-loop-offset = #'[-+0-9]+'|'nil'
+<inner-rest> =  (inner-line*? inner-circle*?) | (inner-circle*? inner-line*?)
+
+
+<inner-circle>=<'circle factor '>inner-circle-x-factor<' variable '>inner-circle-x-variable<' offset '>inner-circle-x-offset
+<' factor '>inner-circle-y-factor<' variable '>inner-circle-y-variable<' offset '>inner-circle-y-offset<' '>
+
+
+inner-circle-x-factor = #'[-+0-9]+'|'nil'
+inner-circle-x-variable = 'i'|'j'|'nil'
+inner-circle-x-offset = #'[-+0-9]+'|'nil'
+inner-circle-y-factor = #'[-+0-9]+'|'nil'
+inner-circle-y-variable ='i'|'j'|'nil'
+inner-circle-y-offset = #'[-+0-9]+'|'nil'
+
+
+<inner-line>=<'line factor '>inner-line-x1-factor<' variable '>inner-line-x1-variable<' offset '>inner-line-x1-offset
+<' factor '>inner-line-y1-factor<' variable '>inner-line-y1-variable<' offset '>inner-line-y1-offset
+<' factor '>inner-line-x2-factor<' variable '>inner-line-x2-variable<' offset '>inner-line-x2-offset
+<' factor '>inner-line-y2-factor<' variable '>inner-line-y2-variable<' offset '>inner-line-y2-offset
+<' arrow  '>inner-line-arrow<' solid  '>inner-line-solid<' '>
+
+inner-line-x1-factor = #'[-+0-9]+'|'nil'
+inner-line-x1-variable = 'i'|'j'|'nil'
+inner-line-x1-offset = #'[-+0-9]+'|'nil'
+inner-line-x2-factor = #'[-+0-9]+'|'nil'
+inner-line-x2-variable = 'i'|'j'|'nil'
+inner-line-x2-offset = #'[-+0-9]+'|'nil'
+inner-line-y1-factor = #'[-+0-9]+'|'nil'
+inner-line-y1-variable = 'i'|'j'|'nil'
+inner-line-y1-offset = #'[-+0-9]+'|'nil'
+inner-line-y2-factor = #'[-+0-9]+'|'nil'
+inner-line-y2-variable = 'i'|'j'|'nil'
+inner-line-y2-offset = #'[-+0-9]+'|'nil'
+inner-line-arrow = 'true'|'false'
+inner-line-solid = 'true'|'false'
+
+
+
+white-space= #"\s{1,}"
+
+inner-loop = #"\s{0,}"
+loop-free-line = #"\s{0,}"
+loop-free-rectangle=  #"\s{0,}"
+loop-free-circle= #"\s{0,}"
+
+
+rest=#".*"

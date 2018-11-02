@@ -1,0 +1,1 @@
+(ns flare.examples.adversary)

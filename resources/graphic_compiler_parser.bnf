@@ -1,0 +1,64 @@
+<expr> = {loops|shapes}
+
+<shapes> = {line|circle|rectangle}
+
+
+loops = loop-variable<' factor '>loop-factor<' variable '>loop-variable2<' offset '>loop-offset <white-space>
+<loop-factor> = #'[-+0-9]+'|'nil'
+<loop-variable> = 'i'|'j'|'nil'
+<loop-offset> = #'[-+0-9]+'|'nil'
+<loop-variable2> = 'i'|'j'|'nil'
+
+
+line =<'line factor '>line-x1-factor<' variable '>line-x1-variable<' offset '>line-x1-offset
+<' factor '>line-y1-factor<' variable '>line-y1-variable<' offset '>line-y1-offset
+<' factor '>line-x2-factor<' variable '>line-x2-variable<' offset '>line-x2-offset
+<' factor '>line-y2-factor<' variable '>line-y2-variable<' offset '>line-y2-offset
+<' arrow  '>line-arrow<' solid  '>line-solid <white-space>
+
+<line-x1-factor> = #'[-+0-9]+'|'nil'
+<line-x1-variable> = 'i'|'j'|'nil'
+<line-x1-offset> = #'[-+0-9]+'|'nil'
+<line-x2-factor> = #'[-+0-9]+'|'nil'
+<line-x2-variable> = 'i'|'j'|'nil'
+<line-x2-offset> = #'[-+0-9]+'|'nil'
+<line-y1-factor> = #'[-+0-9]+'|'nil'
+<line-y1-variable> = 'i'|'j'|'nil'
+<line-y1-offset> = #'[-+0-9]+'|'nil'
+<line-y2-factor> = #'[-+0-9]+'|'nil'
+<line-y2-variable> = 'i'|'j'|'nil'
+<line-y2-offset> = #'[-+0-9]+'|'nil'
+<line-arrow> = 'true'|'false'
+<line-solid> = 'true'|'false'
+<white-space>= #"\s{0,}"
+
+
+rectangle =<'rectangle factor '>rectangle-x1-factor<' variable '>rectangle-x1-variable<' offset '>line-x1-offset
+<' factor '>rectangle-y1-factor<' variable '>rectangle-y1-variable<' offset '>line-y1-offset
+<' factor '>rectangle-x2-factor<' variable '>rectangle-x2-variable<' offset '>line-x2-offset
+<' factor '>rectangle-y2-factor<' variable '>rectangle-y2-variable<' offset '>rectangle-y2-offset <white-space>
+
+<rectangle-x1-factor> = #'[-+0-9]+'|'nil'
+<rectangle-x1-variable> = 'i'|'j'|'nil'
+<rectangle-x1-offset> = #'[-+0-9]+'|'nil'
+<rectangle-x2-factor> = #'[-+0-9]+'|'nil'
+<rectangle-x2-variable> = 'i'|'j'|'nil'
+<rectangle-x2-offset> = #'[-+0-9]+'|'nil'
+<rectangle-y1-factor> = #'[-+0-9]+'|'nil'
+<rectangle-y1-variable> = 'i'|'j'|'nil'
+<rectangle-y1-offset> = #'[-+0-9]+'|'nil'
+<rectangle-y2-factor> = #'[-+0-9]+'|'nil'
+<rectangle-y2-variable> = 'i'|'j'|'nil'
+<rectangle-y2-offset> = #'[-+0-9]+'|'nil'
+
+circle=<'circle factor '>circle-x-factor<' variable '>circle-x-variable<' offset '>circle-x-offset
+<' factor '>circle-y-factor<' variable '>circle-y-variable<' offset '>circle-y-offset <white-space>
+
+<circle-x-factor> = #'[-+0-9]+'|'nil'
+<circle-x-variable> = 'i'|'j'|'nil'
+<circle-x-offset> = #'[-+0-9]+'|'nil'
+<circle-y-factor> = #'[-+0-9]+'|'nil'
+<circle-y-variable> ='i'|'j'|'nil'
+<circle-y-offset> = #'[-+0-9]+'|'nil'
+
+
